@@ -58,6 +58,138 @@ public class UrlValidatorTest extends TestCase {
    public void testYourSecondPartition(){
 	   
    }
+   
+   public void testScheme() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	  
+	   System.out.println("***************************These schemes should be valid.***************************");
+	   
+	   // begins with letter
+	   System.out.println(urlVal.isValid("http://google.com"));
+	   // contains letters, +, -, .
+	   System.out.println(urlVal.isValid("h7+-.://google.com"));
+	   // contains capital letters
+	   System.out.println(urlVal.isValid("HTTP://google.com"));
+
+	   
+	   System.out.println("***************************These schemes should be invalid.***************************");
+	   // doesn't begin with a letter
+	   System.out.println(urlVal.isValid("7http://google.com"));
+	   // contains invalid characters
+	   System.out.println(urlVal.isValid("h7+-.[://google.com"));
+   }
+   
+   public void testAuthority() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   
+	   System.out.println("***************************These URLs should contain valid authority components.***************************");
+	   
+	   // begins with a double slash
+	   System.out.println(urlVal.isValid("http://google.com"));
+	   // port number between 0 and 65535
+	   System.out.println(urlVal.isValid("http://www.google.com:80"));
+	   // minimum port number
+	   System.out.println(urlVal.isValid("http://www.google.com:0"));
+	   // maximum port number
+	   System.out.println(urlVal.isValid("http://www.google.com:65535"));
+	   // valid username
+	   System.out.println(urlVal.isValid("http://userName@www.google.com:80"));
+
+
+	   System.out.println("***************************These URLs should contain invalid authority components.***************************");
+	   
+	   // doesn't start with double slash
+	   System.out.println(urlVal.isValid("http:/google.com"));
+	   // colon but no port number
+	   System.out.println(urlVal.isValid("http://www.google.com:"));
+	   // empty authority
+	   System.out.println(urlVal.isValid("http://"));
+	   
+   }
+
+   public void testPath() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   
+	   System.out.println("***************************These URLs should contain valid path components.***************************");
+
+	   // empty path
+	   System.out.println(urlVal.isValid("http://www.google.com"));
+	   // nonempty path
+	   System.out.println(urlVal.isValid("http://www.google.com/path1/path2"));
+	   // using path segments
+	   System.out.println(urlVal.isValid("http://www.google.com/./path1/path2"));
+	   System.out.println(urlVal.isValid("http://www.google.com/../path1/path2"));
+
+	   
+	   System.out.println("***************************These URLs should contain invalid path components.***************************");
+
+	   // empty authority
+	   System.out.println(urlVal.isValid("http://path1/path2"));
+	   // containing spaces
+	   System.out.println(urlVal.isValid("http://www.google.com/path1 /path2"));
+   }
+   
+   public void testQuery() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   
+	   System.out.println("***************************These URLs should contain valid query components.***************************");
+
+	   // empty query
+	   System.out.println(urlVal.isValid("http://www.google.com"));
+	   // single query
+	   System.out.println(urlVal.isValid("http://www.google.com?action=view"));
+	   // single query with path
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?action=view"));
+	   // multiple queries delimited by ampersand
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?key1=value1&key2=value2"));
+	   // multiple queries delimited by semicolon
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?key1=value1;key2=value2"));
+	   // terminated by #
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?action=view#"));
+	   // URL ends in fragment
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?action=view#top"));
+	   // URL ends with question mark but without a query string
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?"));
+	   
+	   System.out.println("***************************These URLs should contain invalid query components.***************************");
+
+	   // space in URL
+	   System.out.println(urlVal.isValid("http://www.google.com/test1?action= view"));
+
+
+
+   }
+   
+   public void testFragment() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   
+	   System.out.println("***************************These URLs should contain valid fragment components.***************************");
+	   
+	   // fragment contains lowercase letters
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#top"));
+	   // fragment contains uppercase letters
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#TOP"));
+	   // URL terminated by #
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#"));
+	   // fragment contains numbers 
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#top4u3"));
+	   // fragment contains numbers and special characters / and ?
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#top/4u?3"));
+	   // fragment contains other characters
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#top/4u?3[3"));
+
+	   
+	   System.out.println("***************************These URLs should contain invalid fragment components.***************************");
+
+	   // fragment contains spaces
+	   System.out.println(urlVal.isValid("http://www.google.com/test1#to p"));
+
+   }
+   
+   public void testOtherPartitions() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   System.out.println(urlVal.isValid(""));
+   }
      
    public void testIsValid()
    {
@@ -105,7 +237,7 @@ public class UrlValidatorTest extends TestCase {
 	   System.out.println("Number of Bugs: " + numbBugs);
 	   System.out.println("Number of Total Test: " + totalTest);
 	   System.out.println("");
-	   //System.out.println(tempStorage);
+	   System.out.println(tempStorage);
 	   
 	   numbBugs = 0;
 	   totalTest = 0;
