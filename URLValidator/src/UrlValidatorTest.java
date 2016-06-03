@@ -50,15 +50,7 @@ public class UrlValidatorTest extends TestCase {
    }
    
    
-   public void testYourFirstPartition()
-   {
-	   
-   }
-   
-   public void testYourSecondPartition(){
-	   
-   }
-   
+  // Test input partition
    public void testScheme() {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	  
@@ -106,6 +98,14 @@ public class UrlValidatorTest extends TestCase {
 	   System.out.println(urlVal.isValid("http://"));
 	   
    }
+   
+   /*public void testPort() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   for (int i = 0; i < 2000; ++i) {
+		   System.out.println(i + ": ");
+		   System.out.println(urlVal.isValid("http://www.google.com:" + i));
+	   }
+   }*/
 
    public void testPath() {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
@@ -203,11 +203,11 @@ public class UrlValidatorTest extends TestCase {
 	   int iS, iA, iPo, iPa, iPao, iQ;
 	   
 	   // List of valid URL components
-	   String[] validScheme = {"http://", "", "ftp://", "h3t://" };
+	   String[] validScheme = {"http://", "ftp://"};
 	   String[] validAuthority = {"www.google.com", "go.com", "go.au", "0.0.0.0", "255.255.255.255", "255.com", "go.cc" };
 	   String[] validPort = { ":80", ":65535", ":0", "", ":65636" };
-	   String[] validPath = { "/test1", "/t123", "/$23","/test1/", "", "/test1/file" };
-	   String[] validPathOptions = { "/test1", "/t123", "/$23", "/test1/", "", "/test1/file", "/t123/file", "/$23/file", "/test1//file"};
+	   String[] validPath = { "/test1", "/t123", "/$23", "", "/test1/file" };
+	   String[] validPathOptions = { "/test1", "/t123", "/$23", "/test1/", "", "/test1/file", "/t123/file", "/$23/file"};
 	   String[] validQuery = { "?action=view", "?action=edit&mode=up", ""};
 	   
 	   for (iS = 0; iS < validScheme.length; iS++) {
@@ -237,7 +237,7 @@ public class UrlValidatorTest extends TestCase {
 	   System.out.println("Number of Bugs: " + numbBugs);
 	   System.out.println("Number of Total Test: " + totalTest);
 	   System.out.println("");
-	   System.out.println(tempStorage);
+	   //System.out.println(tempStorage);
 	   
 	   numbBugs = 0;
 	   totalTest = 0;
